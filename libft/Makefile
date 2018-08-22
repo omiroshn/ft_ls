@@ -85,15 +85,15 @@ all: $(NAME)
 .NOTPARALLEL: all $(NAME) clean fclean re 
 
 $(NAME): $(OBJ_LIBFT) $(OBJ_PRINTF) $(HEADERS_LIBFT) $(HEADER_PRINTF)
-	@printf "\n"
+	@printf " $(RED)>$(EOC) $(GREEN)$(NAME) is ready.$(EOC)\n"
 	@ar rcs $(NAME) $(OBJ_LIBFT) $(OBJ_PRINTF)
 	@ranlib $(NAME)
 $(OBJ_LIBFT): obj/%.o: src/%.c $(HEADERS_LIBFT)
 	@$(CC) -o $@ $(FLAGS) $(HEADERS) -c $<
-	@printf  "$(BLUE).$(EOC)"
+	@printf "$(BLUE).$(EOC)"
 $(OBJ_PRINTF): ft_printf/obj/%.o: ft_printf/src/%.c $(HEADER_PRINTF)
 	@$(CC) -o $@ $(FLAGS) $(HEADERS) -c $<
-	@printf  "$(YELLOW).$(EOC)"
+	@printf "$(YELLOW).$(EOC)"
 clean:
 	@rm -rf $(OBJ_LIBFT) $(OBJ_PRINTF)
 fclean: clean
