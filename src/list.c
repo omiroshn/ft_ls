@@ -22,11 +22,29 @@ t_llist	*lst_push_back(t_llist **head, char *value)
 	return (*head);
 }
 
+void	lst_free(t_llist *head)
+{
+	t_llist *tmp;
+
+	//int num_entries_freed = 0;
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		free(tmp);
+		free(tmp->name);
+		//num_entries_freed++;
+	}
+	free(head);
+	//ft_printf("Freed %d entries\n", num_entries_freed);
+}
+
 void	lst_print(t_llist *list)
 {
 	while (list)
 	{
-		ft_printf("\033[1;34m%s\n\033[0m", list->name);
+		ft_printf(ANSI_COLOR_BLUE_BOLD
+			"%s"ANSI_COLOR_RESET"\n", list->name);
 		list = list->next;
 	}
 }

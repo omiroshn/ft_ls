@@ -27,6 +27,7 @@ typedef	struct	s_llist
 }				t_llist;
 
 t_llist	*lst_push_back(t_llist **head, char *value);
+void	lst_free(t_llist *head);
 void	lst_print(t_llist *list);
 
 #endif

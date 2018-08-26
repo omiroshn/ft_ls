@@ -18,6 +18,7 @@ SRC = $(addprefix src/, $(addsuffix .c, $(FILES)))
 OBJ = $(addprefix obj/, $(addsuffix .o, $(FILES)))
 OBJ_LIST = $(addsuffix .o, $(FILES))
 # FLAGS = -Wall -Wextra -Werror -O3
+FLAGS = -g
 HEADERS = -I./includes -I./libft/includes -I./libft/ft_printf/includes
 HEADER = ./includes/ft_ls.h ./includes/colored_str.h
 
