@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omiroshn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/08/21 22:01:39 by omiroshn          #+#    #+#             */
-/*   Updated: 2018/08/21 22:01:40 by omiroshn         ###   ########.fr       */
+/*   Created: 2018/08/26 16:50:22 by omiroshn          #+#    #+#             */
+/*   Updated: 2018/08/26 16:50:23 by omiroshn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS_H
-# define FT_LS_H
+#include "ft_ls.h"
 
-# include "libft.h"
-# include "colored_str.h"
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <dirent.h>
-# include <errno.h>
-
-typedef	struct	s_llist
+t_llist	*lst_push_back(t_llist **head, char *value)
 {
-	char			*name;
-	struct s_llist	*next;
-}				t_llist;
+	while (*head)
+		head = &(*head)->next;
+	*head = malloc(sizeof(t_llist));
+	(*head)->name = ft_strdup(value);
+	(*head)->next = NULL;
+	return (*head);
+}
 
-t_llist	*lst_push_back(t_llist **head, char *value);
-void	lst_print(t_llist *list);
-
-#endif
+void	lst_print(t_llist *list)
+{
+	while (list)
+	{
+		ft_printf("\033[1;34m%s\n\033[0m", list->name);
+		list = list->next;
+	}
+}

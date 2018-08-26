@@ -1,0 +1,5 @@
+./ft_ls "asas" "asga" "ashadnadh" . ../ opendir
+ls "asas" "asga" "ashadnadh" . ../ opendir
+
+./ft_ls ft_ls Makefile author
+ls ft_ls Makefile author

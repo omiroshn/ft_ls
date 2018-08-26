@@ -12,14 +12,14 @@
 
 NAME = ft_ls
 CC = clang
-FILES = main
+FILES = main list
 LIBFT_DIR = libft/
 SRC = $(addprefix src/, $(addsuffix .c, $(FILES)))
 OBJ = $(addprefix obj/, $(addsuffix .o, $(FILES)))
 OBJ_LIST = $(addsuffix .o, $(FILES))
 # FLAGS = -Wall -Wextra -Werror -O3
-HEADERS = -I./includes -I./libft/includes
-HEADER = ./includes/ft_ls.h
+HEADERS = -I./includes -I./libft/includes -I./libft/ft_printf/includes
+HEADER = ./includes/ft_ls.h ./includes/colored_str.h
 
 EOC=\033[0m
 BLUE=\033[1;34m
