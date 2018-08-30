@@ -29,10 +29,10 @@ void	lst_free(t_llist *head)
 	//int num_entries_freed = 0;
 	while (head)
 	{
+		free(head->name);
 		tmp = head;
-		head = head->next;
 		free(tmp);
-		free(tmp->name);
+		head = head->next;
 		//num_entries_freed++;
 	}
 	free(head);

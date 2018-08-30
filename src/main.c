@@ -71,6 +71,8 @@ int		read_files(char *dir_name)
 		//num_entries++;
 	}
 	//ft_printf("Num entries: %d\n", num_entries);
+
+	//check if argc > 2
 	ft_printf("%s:\n", dir_name);
 	lst_print(head);
 	lst_free(head);
