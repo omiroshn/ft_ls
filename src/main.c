@@ -44,7 +44,7 @@ int		read_files(t_ft_ls *ls, char *dir_name)
 
 	ls->head = NULL;
 	ls->tail = NULL;
-	
+	ft_printf("shit\n");
 	if (stat(dir_name, &file_stat) < 0)
 		return (0);
 	ft_printf("Information for %s\n", dir_name);
