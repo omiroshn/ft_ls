@@ -41,6 +41,7 @@ LIBFT = ft_atoi ft_bzero ft_countwords \
 		ft_strsub ft_strjoin ft_strtrim \
 		ft_strsplit get_next_line ft_atoi_base \
 		rgb_to_int rgb_smooth ft_isalnum ft_isascii \
+		ft_sort_argv \
 
 LIBFT_PRINTF =  ft_printf \
 				print_d \

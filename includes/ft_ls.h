@@ -26,6 +26,14 @@ typedef	struct	s_llist
 	struct s_llist	*next;
 }				t_llist;
 
+typedef struct	s_ft_ls
+{
+	t_llist		*head;
+	t_llist		*tail;
+	int			flags;
+	int			flags_on;
+}				t_ft_ls;
+
 t_llist	*lst_push_back(t_llist **head, char *value);
 void	lst_free(t_llist *head);
 void	lst_print(t_llist *list);

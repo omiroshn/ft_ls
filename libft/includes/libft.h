@@ -97,6 +97,7 @@ double			ft_map(double value, double istart,
 									double iend, double ostart, double oend);
 int				rgb_to_int(int red, int green, int blue);
 int				get_rgb_smooth(double t, int k);
+char			**ft_sort_argv(int argc, char **argv);
 int				ft_printf(const char *msg, ...);
 
 #endif
