@@ -20,6 +20,18 @@
 # include <dirent.h>
 # include <errno.h>
 
+# define FT_LFLAG 0x1
+# define FT_RECUR 0x2
+# define FT_ALL 0x4
+# define FT_REV 0x8
+# define FT_TSORT 0x10
+
+# define IS_LFLAG(flags) ((flags) & 1)
+# define IS_RECUR(flags) ((flags >> 1) & 1)
+# define IS_ALL(flags) ((flags >> 2) & 1)
+# define IS_REV(flags) ((flags >> 3) & 1)
+# define IS_TSORT(flags) ((flags >> 4) & 1)
+
 typedef	struct	s_llist
 {
 	char			*name;
@@ -28,14 +40,14 @@ typedef	struct	s_llist
 
 typedef struct	s_ft_ls
 {
-	t_llist		*head;
-	t_llist		*tail;
-	int			flags;
-	int			flags_on;
+	t_llist			*head;
+	t_llist			*tail;
+	struct dirent	*sd;
+	struct stat 	file_stat;
 }				t_ft_ls;
 
 t_llist	*lst_push_back(t_llist **head, char *value);
 void	lst_free(t_llist *head);
-void	lst_print(t_llist *list);
+void	lst_print(t_llist *list, uint64_t flags);
 
 #endif

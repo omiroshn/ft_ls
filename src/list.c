@@ -39,12 +39,19 @@ void	lst_free(t_llist *head)
 	//ft_printf("Freed %d entries\n", num_entries_freed);
 }
 
-void	lst_print(t_llist *list)
-{
+void	lst_print(t_llist *list, uint64_t flags)
+{	
 	while (list)
 	{
-		ft_printf(ANSI_COLOR_BLUE_BOLD
+		if (IS_ALL(flags))
+			ft_printf(ANSI_COLOR_BLUE_BOLD
 			"%s"ANSI_COLOR_RESET"\n", list->name);
+		else
+		{
+			if (list->name[0] != '.')
+				ft_printf(ANSI_COLOR_BLUE_BOLD
+				"%s"ANSI_COLOR_RESET"\n", list->name);
+		}
 		list = list->next;
 	}
 }

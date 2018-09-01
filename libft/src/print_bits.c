@@ -1,37 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sort_argv.c                                     :+:      :+:    :+:   */
+/*   print_bits.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omiroshn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/08/31 20:07:16 by omiroshn          #+#    #+#             */
-/*   Updated: 2018/08/31 20:07:17 by omiroshn         ###   ########.fr       */
+/*   Created: 2018/09/01 16:44:45 by omiroshn          #+#    #+#             */
+/*   Updated: 2018/09/01 16:44:46 by omiroshn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		ft_sort_argv(int argc, char **argv)
+void	print_bits(uint64_t octet)
 {
-	int		i;
-	int		j;
-	char	*tmp;
+	int		z;
+	int		oct;
 
-	i = 1;
-	while (i < argc)
+	z = 128;
+	oct = octet;
+	while (z > 0)
 	{
-		j = 0;
-		while (j < argc - i)
-		{
-			if (ft_strcmp(argv[j], argv[j + 1]) > 0)
-			{
-				tmp = argv[j];
-				argv[j] = argv[j + 1];
-				argv[j + 1] = tmp;
-			}
-			j++;
-		}
-		i++;
+		if (oct & z)
+			write(1, "1", 1);
+		else
+			write(1, "0", 1);
+		z >>= 1;
 	}
+	write(1, "\n", 1);
 }
