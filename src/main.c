@@ -14,13 +14,8 @@
 
 int		print_error(char *dir_name, char *strerror)
 {
-	if (errno == 2)
+	if (errno == 2 || errno == 13)
 		ft_printf("ls: %s: %s\n", dir_name, strerror);
-	else if (errno == 13)
-	{
-		ft_printf("%s:\n", dir_name);
-		ft_printf("ls: %s: %s\n", dir_name, strerror);
-	}
 	else if (errno == 20)
 		ft_printf("%s\n", dir_name);
 	else
@@ -65,18 +60,14 @@ int		read_files(t_ft_ls *ls, char *dir_name, uint64_t flags)
 
 	if (!(dir = opendir(dir_name)))
 		return (print_error(dir_name, strerror(errno)));
-	
 
-	//int num_entries = 0;
 	while ((ls->sd = readdir(dir)))
 	{
 		if (!ls->tail)
 			ls->tail = lst_push_back(&ls->head, ls->sd->d_name);
 		else
 			ls->tail = lst_push_back(&ls->tail, ls->sd->d_name);
-		//num_entries++;
 	}
-	//ft_printf("Num entries: %d\n", num_entries);
 
 	// check if argc > 2
 	//ft_printf("%s:\n", dir_name);
