@@ -39,9 +39,9 @@ LIBFT = ft_atoi ft_bzero ft_countwords \
 		ft_striter ft_striteri ft_strmap \
 		ft_strmapi ft_strequ ft_strnequ \
 		ft_strsub ft_strjoin ft_strtrim \
-		ft_strsplit get_next_line ft_atoi_base \
-		rgb_to_int rgb_smooth ft_isalnum ft_isascii \
-		ft_sort_argv print_bits \
+		ft_strsplit ft_atoi_base ft_isascii \
+		ft_rgb_to_int ft_rgb_smooth ft_isalnum \
+		ft_sort_argv ft_print_bits get_next_line \
 
 LIBFT_PRINTF =  ft_printf \
 				print_d \

@@ -18,20 +18,13 @@ void		ft_sort_argv(int argc, char **argv)
 	int		j;
 	char	*tmp;
 
-	i = 1;
-	while (i < argc)
-	{
-		j = 0;
-		while (j < argc - i)
-		{
+	i = 0;
+	while (++i < argc && (j = -1))
+		while (++j < argc - i)
 			if (ft_strcmp(argv[j], argv[j + 1]) > 0)
 			{
 				tmp = argv[j];
 				argv[j] = argv[j + 1];
 				argv[j + 1] = tmp;
 			}
-			j++;
-		}
-		i++;
-	}
 }

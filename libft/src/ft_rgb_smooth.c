@@ -1,31 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_bits.c                                       :+:      :+:    :+:   */
+/*   ft_rgb_smooth.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: omiroshn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/09/01 16:44:45 by omiroshn          #+#    #+#             */
-/*   Updated: 2018/09/01 16:44:46 by omiroshn         ###   ########.fr       */
+/*   Created: 2018/01/31 17:09:47 by omiroshn          #+#    #+#             */
+/*   Updated: 2018/01/31 17:09:49 by omiroshn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	print_bits(uint64_t octet)
+int		ft_rgb_smooth(double t, int k)
 {
-	int		z;
-	int		oct;
-
-	z = 128;
-	oct = octet;
-	while (z > 0)
-	{
-		if (oct & z)
-			write(1, "1", 1);
-		else
-			write(1, "0", 1);
-		z >>= 1;
-	}
-	write(1, "\n", 1);
+	return (ft_rgb_to_int((int)(9 * k * (1 - t) * t * t * t * 255),
+		(int)(15 * k * (1 - t) * (1 - t) * t * t * 255),
+		(int)(8.5 * k * (1 - t) * (1 - t) * (1 - t) * t * 255)));
 }

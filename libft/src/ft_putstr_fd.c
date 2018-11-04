@@ -14,13 +14,6 @@
 
 void	ft_putstr_fd(char const *s, int fd)
 {
-	int		i;
-	char	*str;
-
-	if (!s)
-		return ;
-	i = -1;
-	str = (char *)s;
-	while (str[++i])
-		ft_putchar_fd(str[i], fd);
+	while (*s)
+		ft_putchar_fd(*s++, fd);
 }

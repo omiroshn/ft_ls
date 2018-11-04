@@ -18,6 +18,10 @@ char	*ft_strrchr(const char *s, int c)
 	char	*str;
 
 	str = (char *)s;
+	if (c < 0)
+		c = c + 256;
+	if (c > 255)
+		c = c - 256;
 	i = -1;
 	while (str[++i])
 		;

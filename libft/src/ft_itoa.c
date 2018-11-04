@@ -34,7 +34,6 @@ char	*ft_itoa(int n)
 		str[--len] = '0' + (minus) * (temp % 10);
 		temp /= 10;
 	}
-	if (n < 0)
-		*str = '-';
+	n < 0 ? *str = '-' : 0;
 	return (str);
 }

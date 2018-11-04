@@ -16,11 +16,11 @@
 # include "libft.h"
 # include <fcntl.h>
 
-typedef	struct	s_kek
+typedef	struct	s_gnl
 {
 	char		content[BUFF_SIZE + 1];
 	size_t		size;
-}				t_kek;
+}				t_gnl;
 
 int				get_next_line(const int fd, char **line);
 

@@ -15,10 +15,12 @@
 void	*ft_memalloc(size_t size)
 {
 	void	*m;
+	size_t	i;
 
-	m = malloc(size);
-	if (m == NULL)
+	if (!(m = malloc(size)))
 		return (NULL);
-	ft_bzero(m, size);
+	i = -1;
+	while (++i < size)
+		((unsigned char*)m)[i] = '\0';
 	return (m);
 }

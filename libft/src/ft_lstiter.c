@@ -16,13 +16,12 @@ void	ft_lstiter(t_list *lst, void (*f)(t_list *elem))
 {
 	t_list *list;
 
+	if (!lst || !f)
+		return ;
 	list = lst;
-	if (lst != NULL || f != NULL)
+	while (list)
 	{
-		while (list)
-		{
-			(*f)(list);
-			list = list->next;
-		}
+		(*f)(list);
+		list = list->next;
 	}
 }

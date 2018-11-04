@@ -12,22 +12,19 @@
 
 #include "libft.h"
 
-size_t	ft_countwords(char *str, char sep)
+int		ft_countwords(char *str, char sep)
 {
-	size_t result;
-	size_t i;
+	int	i;
+	int	result;
 
+	if (!str)
+		return (0);
 	i = 0;
 	result = 0;
-	while (str[i] && str[i] == sep)
-		i++;
-	while (str[i])
-	{
-		while (str[i] && str[i] != sep)
-			i++;
+	if (str[0] != sep)
 		result++;
-		while (str[i] && str[i] == sep)
-			i++;
-	}
+	while (++i && str[i])
+		if (str[i] != sep && str[i - 1] == sep)
+			result++;
 	return (result);
 }

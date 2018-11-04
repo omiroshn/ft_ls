@@ -27,6 +27,7 @@ typedef	struct	s_list
 
 void			*ft_memset(void *b, int c, size_t len);
 void			ft_bzero(void *s, size_t n);
+int				ft_countwords(char *str, char sep);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
 void			*ft_memccpy(void *dst, const void *src, int c, size_t n);
 void			*ft_memmove(void *dst, const void *src, size_t len);
@@ -92,13 +93,10 @@ int				ft_isalnum(int c);
 int				ft_printf(const char *msg, ...);
 char			*ft_itoa_base(uintmax_t num, int base, int flag);
 int				ft_atoi_base(char *str, int base);
-int				get_next_line(const int fd, char **line);
-double			ft_map(double value, double istart,
-									double iend, double ostart, double oend);
-int				rgb_to_int(int red, int green, int blue);
-int				get_rgb_smooth(double t, int k);
+int				ft_rgb_to_int(int red, int green, int blue);
+int				ft_rgb_smooth(double t, int k);
 void			ft_sort_argv(int argc, char **argv);
 int				ft_printf(const char *msg, ...);
-void			print_bits(uint64_t octet);
+void			ft_print_bits(uint64_t octet);
 
 #endif

@@ -14,11 +14,6 @@
 
 void	ft_putstr(char *str)
 {
-	int i;
-
-	if (!str)
-		return ;
-	i = -1;
-	while (str[++i])
-		ft_putchar(str[i]);
+	while (*str)
+		ft_putchar(*str++);
 }

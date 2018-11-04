@@ -12,14 +12,14 @@
 
 #include "libft.h"
 
-int			ft_isupper(int c)
+static int	ft_isupper(int c)
 {
-	if (c >= 65 && c <= 90)
+	if (c >= 'A' && c <= 'Z')
 		return (1);
 	return (0);
 }
 
-int			check_characters(char *str, int value, int base)
+static int	check_characters(char *str, int value, int base)
 {
 	if (*str - 'A' >= 0 && ft_isupper(*str) == 1)
 		value = value * base + (*str - 'A' + 10);

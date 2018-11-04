@@ -58,8 +58,7 @@ char		*ft_itoa_base(uintmax_t num, int base, int flag)
 			str[length] = abc[num % base];
 			num = num / base;
 		}
-		if (flag == 0)
-			str = ft_to_lower(str);
+		flag == 0 ? str = ft_to_lower(str) : 0;
 	}
 	return (str);
 }

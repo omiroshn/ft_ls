@@ -12,21 +12,21 @@
 
 #include "get_next_line.h"
 
-void	ft_strramen(char **line, t_kek *arrfd, char *end)
+void	ft_joinstr(char **line, t_gnl *gnl, char *end)
 {
 	char	*temp;
 	char	*temp2;
 
 	if (end)
 	{
-		temp = ft_strsub(arrfd->content, 0, end - arrfd->content);
-		arrfd->size -= (end - arrfd->content) + 1;
-		ft_memmove(arrfd->content, end + 1, arrfd->size + 1);
+		temp = ft_strsub(gnl->content, 0, end - gnl->content);
+		gnl->size -= (end - gnl->content) + 1;
+		ft_memmove(gnl->content, end + 1, gnl->size + 1);
 	}
 	else
 	{
-		temp = ft_strdup(arrfd->content);
-		arrfd->size = 0;
+		temp = ft_strdup(gnl->content);
+		gnl->size = 0;
 	}
 	temp2 = *line;
 	if (temp2)
@@ -41,7 +41,7 @@ void	ft_strramen(char **line, t_kek *arrfd, char *end)
 
 int		get_next_line(const int fd, char **line)
 {
-	static t_kek	arr[4500];
+	static t_gnl	gnl[4500];
 	char			*end;
 
 	end = NULL;
@@ -50,17 +50,17 @@ int		get_next_line(const int fd, char **line)
 		return (-1);
 	while (!end)
 	{
-		if (!arr[fd].size &&
-			(arr[fd].size = read(fd, arr[fd].content, BUFF_SIZE)) < 1)
+		if (!gnl[fd].size &&
+			(gnl[fd].size = read(fd, gnl[fd].content, BUFF_SIZE)) < 1)
 		{
 			if (*line)
 				return (1);
 			else
-				return (arr[fd].size);
+				return (gnl[fd].size);
 		}
-		arr[fd].content[arr[fd].size] = '\0';
-		end = ft_memchr(arr[fd].content, '\n', arr[fd].size);
-		ft_strramen(line, &arr[fd], end);
+		gnl[fd].content[gnl[fd].size] = '\0';
+		end = ft_memchr(gnl[fd].content, '\n', gnl[fd].size);
+		ft_joinstr(line, &gnl[fd], end);
 	}
 	return (1);
 }

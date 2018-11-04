@@ -16,8 +16,7 @@ static int	is_whitespace(char c)
 {
 	if (c == ' ' || c == '\n' || c == '\t')
 		return (1);
-	else
-		return (0);
+	return (0);
 }
 
 char		*ft_strtrim(char const *s)
