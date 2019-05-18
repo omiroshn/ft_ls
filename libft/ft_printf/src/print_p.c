@@ -33,7 +33,7 @@ inline static void	print(t_info *info, t_num *n)
 	n->wid = info->width;
 	if (!info->minus && !info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 }
 
 int					print_p(t_info *info, t_num n, int i)
@@ -43,24 +43,24 @@ int					print_p(t_info *info, t_num n, int i)
 	{
 		ft_putstr("0x");
 		while (info->precision-- > 0)
-			write(1, "0", 1);
+			write(info->fd, "0", 1);
 		info->res += 2;
 		return (i);
 	}
 	ft_putstr("0x");
 	while (info->precision-- > 0)
-		write(1, "0", 1);
+		write(info->fd, "0", 1);
 	if (!info->minus && info->zero && info->precision <= 0)
 		while (info->width-- > 0)
-			write(1, "0", 1);
+			write(info->fd, "0", 1);
 	else if (!info->minus && info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	ft_putstr(n.s);
 	info->res += ft_strlen(n.s) + 2;
 	if (info->minus)
 		while (n.wid-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	free(n.s);
 	return (i);
 }

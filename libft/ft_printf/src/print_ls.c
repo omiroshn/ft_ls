@@ -40,13 +40,13 @@ int					print_ls(t_info *info, t_num n, int i)
 	print(info, &n);
 	if (!info->minus && !info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	if (!info->minus && info->zero && info->precision <= 0)
 		while (info->width-- > 0)
-			write(1, "0", 1);
+			write(info->fd, "0", 1);
 	else if (!info->minus && info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	if (info->precision >= 0 &&
 		ft_ustrlen(n.swit) > info->precision && info->dot)
 		info->res += ft_putustrl(n.swit, info->precision);
@@ -57,6 +57,6 @@ int					print_ls(t_info *info, t_num n, int i)
 	}
 	if (info->minus)
 		while (n.wid-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	return (i);
 }

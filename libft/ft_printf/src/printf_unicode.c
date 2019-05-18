@@ -76,11 +76,11 @@ int		ft_spreclen(wint_t *s, int len)
 	return (ret);
 }
 
-void	ft_putstrl(char *str, int len)
+void	ft_putstrl(int fd, char *str, int len)
 {
 	int i;
 
 	i = -1;
 	while (++i < len)
-		write(1, &str[i], 1);
+		write(fd, &str[i], 1);
 }

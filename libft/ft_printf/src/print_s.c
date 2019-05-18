@@ -40,17 +40,17 @@ int					print_s(t_info *info, t_num n, int i)
 	print(info, &n);
 	if (!info->minus && !info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	if (!info->minus && info->zero && info->precision <= 0)
 		while (info->width-- > 0)
-			write(1, "0", 1);
+			write(info->fd, "0", 1);
 	else if (!info->minus && info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	if (info->precision >= 0 &&
 		(int)ft_strlen(n.s) > info->precision && info->dot)
 	{
-		ft_putstrl(n.s, info->precision);
+		ft_putstrl(info->fd, n.s, info->precision);
 		info->res += info->precision;
 	}
 	else
@@ -60,6 +60,6 @@ int					print_s(t_info *info, t_num n, int i)
 	}
 	if (info->minus)
 		while (n.wid-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	return (i);
 }

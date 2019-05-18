@@ -43,18 +43,18 @@ inline static void	print_bb(t_info *info, t_num *n)
 {
 	if (!info->minus && !info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	if ((!info->minus && info->zero && info->precision <= 0) ||
 		(!info->minus && info->dot && info->precision))
 	{
 		if (info->hash && n->uimaxt != 0 && !info->dot)
 			ft_putstr("0");
 		while (info->width-- > 0)
-			write(1, "0", 1);
+			write(info->fd, "0", 1);
 	}
 	else if (!info->minus && info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	if ((info->hash && n->uimaxt != 0 && !info->zero && info->precision == 0)
 		|| (info->hash && n->uimaxt != 0
 			&& info->minus && info->precision == 0))
@@ -65,7 +65,7 @@ inline static void	print_bb(t_info *info, t_num *n)
 		free(n->s2);
 	}
 	while (info->precision-- > 0)
-		write(1, "0", 1);
+		write(info->fd, "0", 1);
 }
 
 int					print_o(t_info *info, t_num n, const char *str, int i)
@@ -78,7 +78,7 @@ int					print_o(t_info *info, t_num n, const char *str, int i)
 	info->res += ft_strlen(n.s);
 	if (info->minus)
 		while (n.wid-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	free(n.s);
 	return (i);
 }

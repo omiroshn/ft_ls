@@ -91,6 +91,7 @@ int				ft_isspace(int c);
 int				ft_isascii(int c);
 int				ft_isalnum(int c);
 int				ft_printf(const char *msg, ...);
+int				ft_dprintf(int fd, const char *msg, ...);
 char			*ft_itoa_base(uintmax_t num, int base, int flag);
 int				ft_atoi_base(char *str, int base);
 int				ft_rgb_to_int(int red, int green, int blue);

@@ -55,6 +55,7 @@ typedef	struct		s_info
 	int				dot;
 	int				smt;
 	int				changed;
+	int				fd;
 }					t_info;
 
 /*
@@ -62,6 +63,14 @@ typedef	struct		s_info
 */
 
 int					ft_printf(const char *msg, ...);
+int					ft_dprintf(int fd, const char *msg, ...);
+
+/*
+**					ft_vprintf.c
+*/
+
+void				init_flags(t_info *info, t_num *n);
+int					parse_argument(const char *str, t_info *info, t_num n);
 
 /*
 **					printf_cast.c
@@ -95,7 +104,7 @@ int					ft_putustrl(wint_t *s, int len);
 void				ft_putustr(wint_t *s);
 int					ft_ustrlen(wchar_t *str);
 int					ft_spreclen(wint_t *s, int len);
-void				ft_putstrl(char *str, int len);
+void				ft_putstrl(int fd, char *str, int len);
 
 /*
 **					printf_countlength.c

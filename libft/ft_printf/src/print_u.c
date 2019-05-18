@@ -33,7 +33,7 @@ inline static void	print(t_info *info, t_num *n, const char *str, int i)
 	n->wid = info->width;
 	if (!info->minus && !info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 }
 
 int					print_u(t_info *info, t_num n, const char *str, int i)
@@ -41,12 +41,12 @@ int					print_u(t_info *info, t_num n, const char *str, int i)
 	print(info, &n, str, i);
 	if (!info->minus && info->zero && info->precision <= 0)
 		while (info->width-- > 0)
-			write(1, "0", 1);
+			write(info->fd, "0", 1);
 	else if (!info->minus && info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	while (info->precision-- > 0)
-		write(1, "0", 1);
+		write(info->fd, "0", 1);
 	if (n.imaxt == 0 && n.prec == 0 && info->dot)
 		return (i);
 	n.s = ft_itoa_u(n.imaxt);
@@ -54,7 +54,7 @@ int					print_u(t_info *info, t_num n, const char *str, int i)
 	info->res += ft_intlen_u(n.imaxt);
 	if (info->minus)
 		while (n.wid-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	free(n.s);
 	return (i);
 }

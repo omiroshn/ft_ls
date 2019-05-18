@@ -44,6 +44,7 @@ LIBFT = ft_atoi ft_bzero ft_countwords \
 		ft_sort_argv ft_print_bits get_next_line \
 
 LIBFT_PRINTF =  ft_printf \
+				ft_vprintf \
 				print_d \
 				print_u \
 				print_o \

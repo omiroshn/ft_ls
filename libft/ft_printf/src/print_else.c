@@ -16,12 +16,12 @@ inline static void	print(t_info *info, t_num n, const char *str, int i)
 {
 	if (!info->space)
 	{
-		write(1, &str[i], 1);
+		write(info->fd, &str[i], 1);
 		info->res++;
 	}
 	if (info->minus)
 		while (n.wid-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 }
 
 int					print_else(t_info *info, t_num n, const char *str, int i)
@@ -39,13 +39,13 @@ int					print_else(t_info *info, t_num n, const char *str, int i)
 	n.wid = info->width;
 	if (!info->minus && !info->zero && info->width > 0)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	if (!info->minus && info->zero && info->precision <= 0)
 		while (info->width-- > 0)
-			write(1, "0", 1);
+			write(info->fd, "0", 1);
 	else if (!info->minus && info->zero)
 		while (info->width-- > 0)
-			write(1, " ", 1);
+			write(info->fd, " ", 1);
 	print(info, n, str, i);
 	return (i);
 }
