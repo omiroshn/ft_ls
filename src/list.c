@@ -12,19 +12,19 @@
 
 #include "ft_ls.h"
 
-t_llist	*lst_push_back(t_llist **head, char *value)
+t_file	*lst_push_back(t_file **head, char *value)
 {
 	while (*head)
 		head = &(*head)->next;
-	*head = malloc(sizeof(t_llist));
+	*head = malloc(sizeof(t_file));
 	(*head)->name = ft_strdup(value);
 	(*head)->next = NULL;
 	return (*head);
 }
 
-void	lst_free(t_llist *head)
+void	lst_free(t_file *head)
 {
-	t_llist *tmp;
+	t_file *tmp;
 
 	while (head)
 	{
@@ -34,25 +34,4 @@ void	lst_free(t_llist *head)
 		head = head->next;
 	}
 	free(head);
-}
-
-void	lst_print(t_llist *list, uint64_t flags)
-{	
-	while (list)
-	{
-		if (IS_ALL(flags))
-		{
-			ft_printf(ANSI_COLOR_BLUE_BOLD
-			"%s"ANSI_COLOR_RESET"\n", list->name);
-		}
-		else
-		{
-			if (list->name[0] != '.')
-			{
-				ft_printf(ANSI_COLOR_BLUE_BOLD
-				"%s"ANSI_COLOR_RESET"\n", list->name);
-			}
-		}
-		list = list->next;
-	}
 }

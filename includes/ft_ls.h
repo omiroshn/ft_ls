@@ -19,6 +19,7 @@
 # include <sys/stat.h>
 # include <dirent.h>
 # include <errno.h>
+# include <stdbool.h>
 
 # define FT_LFLAG 0x1
 # define FT_RECUR 0x2
@@ -26,28 +27,34 @@
 # define FT_REV 0x8
 # define FT_TSORT 0x10
 
-# define IS_LFLAG(flags) ((flags) & 1)
-# define IS_RECUR(flags) ((flags >> 1) & 1)
-# define IS_ALL(flags) ((flags >> 2) & 1)
-# define IS_REV(flags) ((flags >> 3) & 1)
-# define IS_TSORT(flags) ((flags >> 4) & 1)
+bool			g_l;
+bool			g_rec;
+bool			g_a;
+bool			g_r;
+bool			g_t;
+bool			g_d;
+bool			g_u;
+bool			g_f;
+bool			g_g;
+bool			g_stop;
 
-typedef	struct	s_llist
+typedef	struct	s_file
 {
 	char			*name;
-	struct s_llist	*next;
-}				t_llist;
+	struct s_file	*next;
+}				t_file;
 
-typedef struct	s_ft_ls
+typedef struct	s_ls
 {
-	t_llist			*head;
-	t_llist			*tail;
+	t_file			*head;
+	t_file			*tail;
 	struct dirent	*sd;
 	struct stat 	file_stat;
-}				t_ft_ls;
+}				t_ls;
 
-t_llist	*lst_push_back(t_llist **head, char *value);
-void	lst_free(t_llist *head);
-void	lst_print(t_llist *list, uint64_t flags);
+t_file	*lst_push_back(t_file **head, char *value);
+void	lst_free(t_file *head);
+void	lst_print(t_file *list, uint64_t flags);
+void	merge_sort(t_file **file);
 
 #endif
