@@ -12,14 +12,14 @@
 
 #include "ft_ls.h"
 
-int		print_error(char *dir_name, char *strerror)
+int		print_error(char *dir_name)
 {
 	if (errno == 2 || errno == 13)
-		ft_dprintf(1, "ls: %s: %s\n", dir_name, strerror);
+		ft_dprintf(1, "ls: %s: %s\n", dir_name, strerror(errno));
 	else if (errno == 20)
 		ft_dprintf(1, "%s\n", dir_name);
 	else
-		ft_dprintf(1, "errno: %d %s\n", errno, strerror);
+		ft_dprintf(1, "errno: %d %s\n", errno, strerror(errno));
 	return (0);
 }
 
@@ -46,33 +46,79 @@ void ft_ls(char *dir_name)
 
 void	print_lst(t_file *file)
 {
-	while(file)
+	while (file)
 	{
 		ft_dprintf(1, "%s\n", file->name);
 		file = file->next;
 	}
 }
 
-int	read_files(char **file, int ac)
+t_file	*get_directories(t_file *head)
+{
+	t_file *directory;
+
+	directory = NULL;
+	while (head)
+	{
+		if (!(opendir(head->name)))
+			if (errno != EACCES)
+				print_error(head->name);
+			else
+				add_to_list(&directory, new_list(head->name));
+		else
+			add_to_list(&directory, new_list(head->name));
+		head = head->next;
+	}
+	return directory;
+}
+
+t_file	*get_files_from_dir(DIR *d)
+{
+	t_file			*files;
+	struct dirent	*dir;
+
+	files = NULL;
+	while ((dir = readdir(d)) != NULL)
+		add_to_list(&files, new_list(dir->d_name));
+	return files;
+}
+
+void	go_through_directories(t_file *directories)
+{
+	DIR				*d;
+	t_file			*files;
+
+	while (directories)
+	{
+		ft_dprintf(1, "\n%s:\n", directories->name);
+		if ((d = opendir(directories->name)))
+		{		
+			files = get_files_from_dir(d);
+			merge_sort(&files);
+			print_lst(files);
+			closedir(d);
+		}
+		else
+			print_error(directories->name);
+		directories = directories->next;
+	}
+}
+
+int	read_input_pars(char **file, int ac)
 {
 	int		i;
 	DIR		*d;
 	t_file	*files;
+	t_file	*directories;
 
 	i = g_stop ? 0 : -1;
 	while (++i < ac)
-		lst_push_back(&files, file[i]);
-	print_lst(files);
+		if (file[i])
+			lst_push_back(&files, file[i]);
+	directories = get_directories(files);
 	merge_sort(&files);
-	print_lst(files);
-	while (files)
-	{
-		if (!(d = opendir(files->name)))
-			print_error(files->name, strerror(errno));
-		else
-			ft_ls(files->name);
-		files = files->next;
-	}
+	merge_sort(&directories);
+	go_through_directories(directories);
 	return (true);
 }
 
@@ -117,7 +163,7 @@ int		main(int argc, char **argv)
 		if (argv[i][0] == '-' && argv[i][1] == '-')
 			g_stop = true;
 		if (argv[i][0] != '-' || g_stop)
-			return (read_files(&argv[i], argc - i));
+			return (read_input_pars(&argv[i], argc - i));
 		j = 0;
 		while (argv[i][++j])
 			set_flag(argv[i][j]);

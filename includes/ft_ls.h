@@ -55,6 +55,8 @@ typedef struct	s_ls
 t_file	*lst_push_back(t_file **head, char *value);
 void	lst_free(t_file *head);
 void	lst_print(t_file *list, uint64_t flags);
+t_file	*new_list(void const *name);
+void	add_to_list(t_file **head, t_file *data);
 void	merge_sort(t_file **file);
 
 #endif
