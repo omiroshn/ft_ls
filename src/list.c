@@ -12,12 +12,14 @@
 
 #include "ft_ls.h"
 
-t_file	*lst_push_back(t_file **head, char *value)
+t_file	*lst_push_back(t_file **head, char *value, struct stat ds, __uint8_t t)
 {
 	while (*head)
 		head = &(*head)->next;
 	*head = malloc(sizeof(t_file));
 	(*head)->name = ft_strdup(value);
+	(*head)->st = ds;
+	(*head)->is_dir = t == 4 ? true : false;
 	(*head)->next = NULL;
 	return (*head);
 }

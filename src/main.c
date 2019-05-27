@@ -10,13 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+//ls -1R . 1 2 3 4 5 author includes ft_ls denied
+
 #include "ft_ls.h"
 
 int		print_error(char *dir_name)
 {
-	if (errno == 2 || errno == 13)
+	if (errno == ENOENT || errno == EACCES)
 		ft_dprintf(1, "ls: %s: %s\n", dir_name, strerror(errno));
-	else if (errno == 20)
+	else if (errno == ENOTDIR)
 		ft_dprintf(1, "%s\n", dir_name);
 	else
 		ft_dprintf(1, "errno: %d %s\n", errno, strerror(errno));
@@ -29,19 +31,6 @@ void	print_error_flags(char flag)
 	ft_dprintf(1, "usage: ls [-lRart] [file ...]\n");
 	// system("leaks ft_ls");
 	exit(-1);
-}
-
-// void get_files(char *dir_name)
-// {
-// 	struct dirent	*sd;
-
-// 	sd = readdir(dir_name);
-// }
-
-void ft_ls(char *dir_name)
-{
-	// get_files(dir_name);
-	// ft_dprintf(1, "%s\n", dir_name);
 }
 
 void	print_lst(t_file *file)
@@ -72,53 +61,123 @@ t_file	*get_directories(t_file *head)
 	return directory;
 }
 
-t_file	*get_files_from_dir(DIR *d)
+t_file	*get_directories_from_list(t_file *list)
 {
-	t_file			*files;
-	struct dirent	*dir;
+	t_file *new;
+	t_file *tail;
 
-	files = NULL;
-	while ((dir = readdir(d)) != NULL)
-		add_to_list(&files, new_list(dir->d_name));
-	return files;
+	new = NULL;
+	tail = NULL;
+	while (list)
+	{
+		if (list->is_dir)
+		{
+			if (new == NULL)
+			{
+				new = ft_memalloc(sizeof(t_file));
+				new->name = list->name;
+				new->next = NULL;
+				tail = new;
+			}
+			else
+			{
+				tail->next = ft_memalloc(sizeof(t_file));
+				tail = tail->next;
+				tail->name = list->name;
+				tail->next = NULL;
+			}
+		}
+		list = list->next;
+	}
+	return new;
 }
 
-void	go_through_directories(t_file *directories)
-{
-	DIR				*d;
-	t_file			*files;
+void	open_directory(char *path) {
+    DIR				*dp;
+	struct dirent	*ep;
+	struct stat		st;
+    char			newdir[512];
+	t_file			*list;
+	t_file			*directories;
 
+	list = NULL;
+	directories = NULL;
+	dp = opendir(path);    
+	
+	if (!dp) {
+		if ((path[0] != '.' || path[1]) && (path[0] != '.' || path[1] != '.'))
+			ft_dprintf(1, "\n%s:\n", path);
+        print_error(path);
+        return;
+    }
+	if ((path[0] != '.' || path[1]) && (path[0] != '.' || path[1] != '.'))
+		ft_dprintf(1, "\n%s:\n", path);
+
+    while ((ep = readdir(dp)))
+	{
+		stat(ep->d_name, &st);
+		lst_push_back(&list, ep->d_name, st, ep->d_type);
+	}
+	merge_sort(&list);
+	directories = get_directories_from_list(list);
+	while (list)
+	{
+		if (g_a)
+			ft_dprintf(1, "%s\n", list->name);
+		else
+		{
+			if (ft_strncmp(list->name, ".", 1))
+				ft_dprintf(1, "%s\n", list->name);
+		}
+		list = list->next;
+	}
+	closedir(dp);
+	merge_sort(&directories);
 	while (directories)
 	{
-		ft_dprintf(1, "\n%s:\n", directories->name);
-		if ((d = opendir(directories->name)))
-		{		
-			files = get_files_from_dir(d);
-			merge_sort(&files);
-			print_lst(files);
-			closedir(d);
+		if (g_rec && (ft_strncmp(directories->name, ".", 1) || g_a))
+		{
+			if ((directories->name[0] != '.' || directories->name[1])
+			&& (directories->name[0] != '.' || directories->name[1] != '.'))
+			{
+				char *tmp1 = ft_strjoin(path, "/");
+				char *tmp2 = ft_strjoin(tmp1, directories->name);
+				open_directory(tmp2);
+				free(tmp1);
+				free(tmp2);
+			}
 		}
-		else
-			print_error(directories->name);
+		directories = directories->next;
+	}
+}
+
+void	ft_ls(t_file *files)
+{
+	t_file	*directories;
+
+	directories = get_directories(files);
+	merge_sort(&directories);
+	while (directories)
+	{
+		open_directory(directories->name);
 		directories = directories->next;
 	}
 }
 
 int	read_input_pars(char **file, int ac)
 {
-	int		i;
-	DIR		*d;
-	t_file	*files;
-	t_file	*directories;
+	int			i;
+	t_file		*files;
+	struct stat	ds;
 
 	i = g_stop ? 0 : -1;
 	while (++i < ac)
 		if (file[i])
-			lst_push_back(&files, file[i]);
-	directories = get_directories(files);
-	merge_sort(&files);
-	merge_sort(&directories);
-	go_through_directories(directories);
+		{
+			stat(file[i], &ds);
+			lst_push_back(&files, file[i], ds, 0);
+		}
+	ft_ls(files);
 	return (true);
 }
 
@@ -154,10 +213,8 @@ int		main(int argc, char **argv)
 	t_ls	ls;
 	int		i;
 	int		j;
-	char	*base;
 
 	i = 0;
-	base = ".";
 	while (++i < argc)
 	{
 		if (argv[i][0] == '-' && argv[i][1] == '-')
@@ -172,6 +229,7 @@ int		main(int argc, char **argv)
 		if (g_g)
 			g_l = true;
 	}
-	ft_ls(base);
+	g_noargs = true;
+	open_directory(".");
 	return (0);
 }
