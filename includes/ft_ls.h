@@ -14,18 +14,16 @@
 # define FT_LS_H
 
 # include "libft.h"
+# include <pwd.h>
 # include "colored_str.h"
 # include <sys/types.h>
 # include <sys/stat.h>
+# include <sys/xattr.h>
+# include <sys/acl.h>
 # include <dirent.h>
 # include <errno.h>
 # include <stdbool.h>
-
-# define FT_LFLAG 0x1
-# define FT_RECUR 0x2
-# define FT_ALL 0x4
-# define FT_REV 0x8
-# define FT_TSORT 0x10
+# include <sys/ioctl.h>
 
 bool			g_l;
 bool			g_rec;
@@ -38,6 +36,9 @@ bool			g_f;
 bool			g_g;
 bool			g_stop;
 bool			g_noargs;
+bool			g_first_dir;
+bool			g_header;
+struct winsize	g_win;
 
 typedef	struct	s_file
 {

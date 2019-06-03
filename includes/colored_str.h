@@ -13,6 +13,26 @@
 #ifndef COLORED_STR_H
 # define COLORED_STR_H
 
+# define BLINK	"\e[5m"
+# define LR		"\e[38;2;225;100;125m"
+# define LY		"\e[38;2;255;220;65m"
+# define LG		"\e[38;2;185;225;70m"
+# define LB		"\e[38;2;80;220;200m"
+# define LP		"\e[38;2;160;160;255m"
+# define R		"\e[1;38;2;225;20;20m"
+# define O		"\e[1;38;2;255;120;10m"
+# define Y		"\e[1;38;2;255;200;0m"
+# define G		"\e[1;38;2;80;200;60m"
+# define B		"\e[1;38;2;50;150;250m"
+# define P		"\e[1;38;2;150;75;255m"
+# define W		"\e[1;38;2;255;250;232m"
+# define BR		"\e[1;48;2;150;0;0m"
+# define BY		"\e[1;48;2;255;155;0m"
+# define BG		"\e[1;48;2;0;100;25m"
+# define BB		"\e[1;48;2;0;65;140m"
+# define BP		"\e[1;48;2;60;0;125m"
+# define E		"\e[0m"
+
 # define ANSI_COLOR_RED				"\x1b[31m"
 # define ANSI_COLOR_GREEN			"\x1b[32m"
 # define ANSI_COLOR_YELLOW			"\x1b[33m"
