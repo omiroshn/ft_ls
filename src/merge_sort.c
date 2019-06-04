@@ -21,7 +21,7 @@
 // 		return b;
 // 	else if (b == NULL)
 // 		return a;
-// 	if ((a->st.st_mtimespec.tv_sec - b->st.st_mtimespec.tv_sec) > 0)
+// 	if ((a->st->st_mtimespec.tv_sec - b->st->st_mtimespec.tv_sec) > 0)
 // 	{
 // 		merged = a;
 // 		merged->next = merge_lists_t(a->next, b);
@@ -45,7 +45,7 @@
 // 	{
 // 		node = head;
 // 		head = head->next;
-// 		if (!next || node->st.st_mtimespec.tv_sec < next->st.st_mtimespec.tv_sec)
+// 		if (!next || node->st->st_mtimespec.tv_sec < next->st->st_mtimespec.tv_sec)
 // 		{
 // 			node->next = next;
 // 			next = node;
@@ -53,7 +53,7 @@
 // 		else
 // 		{
 // 			current = next;
-// 			while (current->next && node->st.st_mtimespec.tv_sec >= current->next->st.st_mtimespec.tv_sec)
+// 			while (current->next && node->st->st_mtimespec.tv_sec >= current->next->st->st_mtimespec.tv_sec)
 // 				current = current->next;
 // 			node->next = current->next;
 // 			current->next = node;
@@ -73,7 +73,7 @@ static t_file	*ft_sort_mtime(t_file *root)
 	{
 		node = root;
 		root = root->next;
-		if (!n_r || node->st.st_mtimespec.tv_sec < n_r->st.st_mtimespec.tv_sec)
+		if (!n_r || node->st->st_mtimespec.tv_sec < n_r->st->st_mtimespec.tv_sec)
 		{
 			node->next = n_r;
 			n_r = node;
@@ -81,7 +81,7 @@ static t_file	*ft_sort_mtime(t_file *root)
 		else
 		{
 			cur = n_r;
-			while (cur->next && node->st.st_mtimespec.tv_sec >= cur->next->st.st_mtimespec.tv_sec)
+			while (cur->next && node->st->st_mtimespec.tv_sec >= cur->next->st->st_mtimespec.tv_sec)
 				cur = cur->next;
 			node->next = cur->next;
 			cur->next = node;

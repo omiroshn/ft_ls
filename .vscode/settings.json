@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "ft_ls.h": "c",
+        "stat.h": "c",
+        "dirent.h": "c",
+        "errno.h": "c",
+        "_errno_t.h": "c",
+        "stdio.h": "c",
+        "_time_t.h": "c",
+        "grp.h": "c"
+    },
+    "C_Cpp.dimInactiveRegions": true
+}

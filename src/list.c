@@ -12,16 +12,36 @@
 
 #include "ft_ls.h"
 
-t_file	*lst_push_back(t_file **head, char *value, struct stat ds, __uint8_t t)
+t_file	*lst_push_back(t_file **head, t_file *file)
 {
 	while (*head)
 		head = &(*head)->next;
-	*head = malloc(sizeof(t_file));
-	(*head)->name = ft_strdup(value);
-	(*head)->st = ds;
-	(*head)->is_dir = t == 4 ? true : false;
+	(*head) = file;
 	(*head)->next = NULL;
 	return (*head);
+}
+
+t_file	*copy_file(t_file *file)
+{
+	t_file *new;
+
+	new = ft_memalloc(sizeof(t_file));
+	new->name = ft_strdup(file->name);
+	new->path = ft_strdup(file->path);
+	new->owner = ft_strdup(file->owner);
+	new->group = ft_strdup(file->group);
+	new->st = ft_memalloc(sizeof(struct stat));
+	new->st = file->st;
+	return new;
+}
+
+void	free_file(t_file *file)
+{
+	free(file->name);
+	free(file->path);
+	free(file->owner);
+	free(file->group);
+	free(file->st);
 }
 
 void	lst_free(t_file *head)
@@ -54,19 +74,4 @@ t_file	*new_list(void const *name)
 		file->next = NULL;
 	}
 	return (file);
-}
-
-void	add_to_list(t_file **head, t_file *data)
-{
-	t_file *file;
-	
-	file = data;
-	if (*head == NULL)
-	{
-		*head = data;
-		return;
-	}
-	while ((*head)->next)
-		head = &(*head)->next;
-	(*head)->next = data;
 }
