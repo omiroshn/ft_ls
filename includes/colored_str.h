@@ -13,6 +13,9 @@
 #ifndef COLORED_STR_H
 # define COLORED_STR_H
 
+#define FTCHEKER
+
+#ifndef FTCHEKER
 # define BLINK	"\e[5m"
 # define LR		"\e[38;2;225;100;125m"
 # define LY		"\e[38;2;255;220;65m"
@@ -32,6 +35,27 @@
 # define BB		"\e[1;48;2;0;65;140m"
 # define BP		"\e[1;48;2;60;0;125m"
 # define E		"\e[0m"
+#else
+# define BLINK	""
+# define LR		""
+# define LY		""
+# define LG		""
+# define LB		""
+# define LP		""
+# define R		""
+# define O		""
+# define Y		""
+# define G		""
+# define B		""
+# define P		""
+# define W		""
+# define BR		""
+# define BY		""
+# define BG		""
+# define BB		""
+# define BP		""
+# define E		""
+#endif
 
 # define ANSI_COLOR_RED				"\x1b[31m"
 # define ANSI_COLOR_GREEN			"\x1b[32m"

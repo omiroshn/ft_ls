@@ -37,10 +37,14 @@ bool			g_d;
 bool			g_u;
 bool			g_f;
 bool			g_g;
+bool			g_s;
+bool			g_one;
 bool			g_stop;
 bool			g_noargs;
 bool			g_first_dir;
 bool			g_header;
+bool			g_firsttime;
+bool			g_color;
 time_t			g_time;
 struct winsize	g_win;
 

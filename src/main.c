@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//ls -1R . 1 2 3 4 5 author includes ft_ls denied
-
 #include "ft_ls.h"
 
 int		print_error(char *name)
@@ -25,12 +23,11 @@ int		print_error(char *name)
 	return (0);
 }
 
-void	print_error_flags(char flag)
+void	print_error_flags(char c)
 {
-	ft_dprintf(1, "ls: illegal option -- %c\n", flag);
-	ft_dprintf(1, "usage: ls [-lRart] [file ...]\n");
-	// system("leaks ft_ls");
-	exit(-1);
+	ft_dprintf(2, "ls: illegal option -- %c\n", c);
+	ft_dprintf(2, "usage: ft_ls [-lRartufgds] [file ...]\n");
+	exit(1);
 }
 
 void	print_lst(t_file *file)
@@ -92,7 +89,7 @@ int		numlen(int num)
 {
 	int len;
 
-	len = 1;
+	len = 0;
 	while (num > 0)
 	{
 		num /= 10;
@@ -128,11 +125,20 @@ void	print_time(t_file *file, int *width)
 	time = ft_strsplit((g_u ? ctime(&file->st->st_atime)
 		: ctime(&file->st->st_mtime)), ' ');
 	time[3][5] = 0;
-	time[4][4] = 0;
-
-	ft_printf("%-*s %*d %s %2s %5s ", width[2], file->group,
-		width[4], file->st->st_size, time[1], time[2],
-		time[g_time - file->st->st_mtime > 15780000 ? 4 : 3]);
+	if (ft_strlen(time[4]) == 5)
+	{
+		i = 5;
+		time[4][4] = 0;
+	}
+	else
+	{
+		i = 6;
+		time[4][5] = 0;
+	}
+	ft_printf("%-*s  %*d %s %2s %*s ", width[2], file->group,
+		width[4], file->st->st_size, time[1], time[2], i,
+		time[g_time - file->st->st_mtime > 13046400
+		|| g_time - file->st->st_mtime < 0 ? 4 : 3]);
 	i = -1;
 	while (time[++i])
 		free(time[i]);
@@ -144,58 +150,75 @@ void	print_ll(t_file *file, int *width)
 	int		i;
 	char	*mode;
 
+	// system("leaks ft_ls");
+	g_firsttime = false;
 	mode = ft_strdup(g_mode);
+	
 	mode[0] = get_file_type(file->st->st_mode);
 	i = 0;
 	while (++i <= 9)
 		if (!(file->st->st_mode & (1 << (9 - i))))
 			mode[i] = '-';
+	if (g_s)
+		ft_printf("%*d ", width[5], file->st->st_blocks);
 	ft_printf("%s%c %*d ", mode, get_attr(file), width[3], file->st->st_nlink);
 	g_g ? 1 : ft_printf("%-*s  ", width[1], file->owner);
+	
 	print_time(file, width);
 	color_print(file, 0);
+	// system("leaks ft_ls");
+	free_file(file);
 	free(mode);
-	file = file->next;
 }
 
 void	print_l(t_file *file, int *width, int tot)
 {
 	int		total;
 	t_file	*head;
+	int		empty;
 
-	head = file;
 	if (tot)
 	{
+		head = file;
+		empty = false;
 		total = 0;
+		if (!head)
+			empty = true;
 		while (head)
 		{
-			total += head->st->st_size;
+			total += head->st->st_blocks;
 			head = head->next;
 		}
-		total /= 512;
-		if (total)
-		{
-			total += 2;
-			ft_printf("total %d\n", total);
-		}
+		empty ? 1 : ft_printf("total %d\n", total);
+		// system("leaks ft_ls");
+		lst_free(head);
 	}
 	head = file;
+	// system("leaks ft_ls");
 	while (head)
 	{
+		// system("leaks ft_ls");
 		print_ll(head, width);
+		free_file(head);
+		free(head);
 		head = head->next;
 	}
+	// lst_free(head);
+	// system("leaks ft_ls");
 }
 
-void	print(t_file *list, int width)
+void	print(t_file *list, int width, int width5)
 {
 	int w;
 	int c;
 
-	w = g_win.ws_col / (width + 1);
+	w = g_win.ws_col / (width + width5 + 1);
 	c = w;
+	g_firsttime = false;
 	while (list)
 	{
+		if (g_s)
+			ft_printf("%*d ", width5, list->st->st_blocks);
 		if (S_ISDIR(list->st->st_mode))
 			ft_printf(Y"%-*s"E, width, list->name);
 		else if (S_ISLNK(list->st->st_mode))
@@ -205,14 +228,19 @@ void	print(t_file *list, int width)
 		else
 			ft_printf(LG"%-*s"E, width, list->name);
 		c--;
-		if (c == 0 && (c = w) == w)
-			ft_printf("\n");
+		if (g_one || (c == 0 && (c = w) == w))
+			write(1, "\n", 1);
 		else
-			ft_printf(" ");
+		{
+			if (list->next == NULL)
+				write(1, "\n", 1);
+			else
+				write(1, " ", 1);
+		}
+		free_file(list);
+		free(list);
 		list = list->next;
 	}
-	if (c != 0)
-		ft_printf("\n");
 }
 
 void	fill_stat(t_file *file, int *width)
@@ -226,9 +254,20 @@ void	fill_stat(t_file *file, int *width)
 	if ((len = (int)ft_strlen(file->group)) > width[2])
 		width[2] = len;
 	if ((len = numlen(file->st->st_nlink)) > width[3])
-		width[3] = len - 1;
+		width[3] = len;
 	if ((len = numlen(file->st->st_size)) > width[4])
 		width[4] = len;
+	if ((len = numlen(file->st->st_blocks)) > width[5])
+		width[5] = len;
+}
+
+t_file	*create_error(char *name)
+{
+	t_file	*file;
+
+	file = (t_file*)malloc(sizeof(t_file));
+	file->name = ft_strdup(name);
+	return (file);
 }
 
 t_file	*create_file(char *path, char *name, int *width)
@@ -251,9 +290,20 @@ t_file	*create_file(char *path, char *name, int *width)
 		file->path[ft_strlen(path) + ft_strlen(file->name) + 1] = 0;
 	}
 	lstat(file->path, file->st);
-	if (g_l)
+	if (g_l || g_s)
 		fill_stat(file, width);
 	return (file);
+}
+
+void	print_header(char *path)
+{
+	if (g_firsttime)
+	{
+		ft_dprintf(1, W"%s:\n"E, path);
+		g_firsttime = false;
+	}
+	else
+		ft_dprintf(1, W"\n%s:\n"E, path);
 }
 
 t_file	*open_directory(char *path, int *width)
@@ -264,7 +314,7 @@ t_file	*open_directory(char *path, int *width)
 	t_file			*file;
 
 	if (g_header)
-		ft_dprintf(1, W"\n%s:\n"E, path);
+		print_header(path);
 	dp = opendir(path);
 	if (!dp)
 	{
@@ -272,13 +322,14 @@ t_file	*open_directory(char *path, int *width)
 		return (NULL);
 	}
 	head = NULL;
-	ft_bzero(width, sizeof(int) * 5);
+	ft_bzero(width, sizeof(int) * 6);
 	while ((ep = readdir(dp)))
 	{
 		if (!g_a && ep->d_name[0] == '.')
 			continue ;
 		file = create_file(path, ep->d_name, width);
 		lst_push_back(&head, file);
+		
 	}
 	closedir(dp);
 	return (head);
@@ -291,9 +342,14 @@ void	go_recurse(t_file *list, int *width)
 	g_f ? 1 : merge_sort(&list);
 	head = list;
 	if (g_l)
+	{
+		// system("leaks ft_ls");
 		print_l(list, width, 1);
+		
+		// system("leaks ft_ls");
+	}
 	else
-		print(list, width[0]);
+		g_one ? print(list, 0, width[5]) : print(list, width[0], width[5]);
 	if (g_rec)
 	{
 		g_header = true;
@@ -305,41 +361,76 @@ void	go_recurse(t_file *list, int *width)
 			head = head->next;
 		}
 	}
+	// lst_free(head);
+	// system("leaks ft_ls");
 }
 
 t_file	*get_directories(t_file *head, int *width)
 {
 	t_file *directory;
 	t_file *errors;
+	t_file *files;
+	t_file *new;
 
 	directory = NULL;
 	errors = NULL;
+	files = NULL;
+	// new_head = copy_file(head);
+	// printf("new_head - list %p \n ", new_head);
+	// new = new_head->next;
 	while (head)
 	{
+		new = copy_file(head);
 		if (opendir(head->name))
-			lst_push_back(&directory, copy_file(head));
-		else if (S_ISREG(head->st->st_mode))
-			print_ll(head, width);	
+			lst_push_back(&directory, new);
+		else if (S_ISREG(head->st->st_mode) || S_ISLNK(head->st->st_mode))
+			lst_push_back(&files, new);
 		else
-			lst_push_back(&errors, copy_file(head));
+			lst_push_back(&errors, new);
+		// free(head);
+		// free_file(head);
+		// free(new->name);
+		// free(new->group);
+		// free(new->st);
+		// free(new->owner);
+		// free(new->path);
+		// free(new);
+		// new = new->next;
+		// new = copy_file(head);
+		// printf("new - list %p \n ", new);
 		head = head->next;
+	}
+	if (files)
+	{
+		g_f ? 1 : merge_sort(&files);
+		if (g_l)
+			print_l(files, width, 0);
+		else
+			g_one ? print(files, 0, width[5]) : print(files, width[0], width[5]);
+		// lst_free(files);
 	}
 	while (errors)
 	{
-		ft_dprintf(1, W"\n%s:\n"E, errors->name);
+		if (g_header)
+			print_header(errors->name);
 		print_error(errors->name);
+		free_file(errors);
+		free(errors);
 		errors = errors->next;
+		// free_file(errors);
 	}
-	return directory;
+	return (directory);
 }
 
 void	ft_ls(char *path)
 {
 	t_file	*list;
-	int		width[5];
+	int		width[6];
 
-	list = open_directory(path, &width[0]);
+	list = open_directory(path, &width[0]);	
 	go_recurse(list, &width[0]);
+	// free_file(list);
+	// system("leaks ft_ls");
 }
 
 void	go_through_params(t_file *files, int *width)
@@ -347,11 +438,15 @@ void	go_through_params(t_file *files, int *width)
 	t_file	*directories;
 
 	directories = get_directories(files, width);
+	// system("leaks ft_ls");
 	g_f ? 1 : merge_sort(&directories);
 	while (directories)
 	{
 		if (S_ISDIR(directories->st->st_mode))
 			ft_ls(directories->path);
+		else if (g_one && S_ISLNK(directories->st->st_mode))
+			ft_ls(directories->path);
+		free_file(directories);
 		directories = directories->next;
 	}
 }
@@ -362,22 +457,31 @@ int		read_parameters(char **file, int ac)
 	t_file		*head;
 	t_file		*new;
 	int			header_count;
-	int			width[5];
+	int			width[6];
+	struct stat st;
 
 	i = g_stop ? 0 : -1;
 	head = NULL;
 	header_count = 0;
-	ft_bzero(width, sizeof(int) * 5);
+	ft_bzero(width, sizeof(int) * 6);
 	while (++i < ac)
 		if (file[i])
 		{
-			new = create_file(file[i], file[i], width);
-			lst_push_back(&head, new);
+			if (lstat(file[i], &st) == -1)
+				print_error(file[i]);
+			else
+			{
+				new = create_file(file[i], file[i], width);
+				lst_push_back(&head, new);
+			}
 			header_count++;
 		}
+	if (!head && g_stop)
+		ft_ls(".");
 	if (header_count > 1)
 		g_header = true;
 	go_through_params(head, width);
+	system("leaks ft_ls");
 	return (true);
 }
 
@@ -401,11 +505,14 @@ void	set_flags(char c)
 		g_g = true;
 	else if (c == 'd')
 		g_d = true;
+	else if (c == 's')
+		g_s = true;
+	else if (c == '1')
+		g_one = true;
+	else if (c == 'G')
+		g_color = true;
 	else
-	{
-		ft_dprintf(1, "usage: ft_ls [-lRartufgd]\n");
-		exit(1);
-	}
+		print_error_flags(c);
 }
 
 int		main(int argc, char **argv)
@@ -414,13 +521,14 @@ int		main(int argc, char **argv)
 	int		j;
 
 	i = 0;
+	g_firsttime = true;
 	time(&g_time);
 	ioctl(0, TIOCGWINSZ, &g_win);
 	while (++i < argc)
 	{
-		if (argv[i][0] == '-' && argv[i][1] == '-')
+		if (!ft_strcmp(argv[i], "--"))
 			g_stop = true;
-		if (argv[i][0] != '-' || g_stop)
+		if (argv[i][0] != '-' || g_stop || !ft_strcmp(argv[i], "-"))
 			return (read_parameters(&argv[i], argc - i));
 		j = 0;
 		while (argv[i][++j])
@@ -430,5 +538,6 @@ int		main(int argc, char **argv)
 	}
 	g_noargs = true;
 	ft_ls(".");
+	system("leaks ft_ls");
 	return (0);
 }

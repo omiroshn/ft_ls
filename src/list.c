@@ -26,12 +26,11 @@ t_file	*copy_file(t_file *file)
 	t_file *new;
 
 	new = ft_memalloc(sizeof(t_file));
-	new->name = ft_strdup(file->name);
-	new->path = ft_strdup(file->path);
-	new->owner = ft_strdup(file->owner);
-	new->group = ft_strdup(file->group);
-	new->st = ft_memalloc(sizeof(struct stat));
+	new->name = file->name;
+	new->path = file->path;
 	new->st = file->st;
+	new->owner = file->owner;
+	new->group = file->group;
 	return new;
 }
 
@@ -39,9 +38,9 @@ void	free_file(t_file *file)
 {
 	free(file->name);
 	free(file->path);
+	free(file->st);
 	free(file->owner);
 	free(file->group);
-	free(file->st);
 }
 
 void	lst_free(t_file *head)
@@ -50,28 +49,17 @@ void	lst_free(t_file *head)
 
 	while (head)
 	{
-		free(head->name);
 		tmp = head;
+		free(tmp->name);
+		if (g_l || g_s)
+		{
+			free(tmp->group);
+			free(tmp->owner);
+		}
+		free(tmp->path);
+		free(tmp->st);
 		free(tmp);
 		head = head->next;
 	}
 	free(head);
-}
-
-t_file	*new_list(void const *name)
-{
-	t_file	*file;
-
-	file = ft_memalloc(sizeof(t_file));
-	if (name == NULL)
-	{
-		file->name = NULL;
-		file->next = NULL;
-	}
-	else
-	{
-		file->name = ft_strdup(name);
-		file->next = NULL;
-	}
-	return (file);
 }
