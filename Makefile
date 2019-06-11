@@ -12,24 +12,18 @@
 
 NAME = ft_ls
 CC = clang
-FILES = main list merge_sort
+FILES = main list merge_sort open_file new_file support print
 LIBFT_DIR = libft/
 SRC = $(addprefix src/, $(addsuffix .c, $(FILES)))
 OBJ = $(addprefix obj/, $(addsuffix .o, $(FILES)))
 OBJ_LIST = $(addsuffix .o, $(FILES))
-# FLAGS = -Wall -Wextra -Werror -O3
-FLAGS = -g
+FLAGS = -Wall -Wextra -Werror -O3
 HEADERS = -I./includes -I./libft/includes -I./libft/ft_printf/includes
 HEADER = ./includes/ft_ls.h ./includes/colored_str.h
 
 EOC=\033[0m
-BLUE=\033[1;34m
-YELLOW=\033[1;33m
-LGREEN=\033[1;32m
 GREEN=\033[32m
 RED=\033[31m
-LRED=\033[91m
-BRED=\033[1;31m
 
 all: $(NAME)
 

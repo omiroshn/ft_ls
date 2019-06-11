@@ -44,7 +44,6 @@ bool			g_noargs;
 bool			g_first_dir;
 bool			g_header;
 bool			g_firsttime;
-bool			g_color;
 time_t			g_time;
 struct winsize	g_win;
 
@@ -58,25 +57,51 @@ typedef	struct	s_file
 	struct s_file	*next;
 }				t_file;
 
-typedef struct	s_ls
-{
-	t_file			*head;
-	t_file			*tail;
-	struct dirent	*sd;
-	struct stat 	file_stat;
-}				t_ls;
+/*
+** main.c
+*/
+void			ft_ls(char *path);
 
-void	free_file(t_file *file);
-t_file	*copy_file(t_file *file);
-t_file	*lst_push_back(t_file **head, t_file *file);
-t_file	*lst_push_back_p(t_file **head, char *value, struct stat *ds, __uint8_t t);
-void	lst_free(t_file *head);
-void	lst_print(t_file *list, uint64_t flags);
-t_file	*new_list(void const *name);
-void	add_to_list(t_file **head, t_file *data);
-void	merge_sort(t_file **file);
-void	ft_ls(char *path);
-void    print_l(t_file *file, int *width, int tot);
-void	print_ll(t_file *file, int *width);
+/*
+** list.c
+*/
+t_file			*lst_push_back(t_file **head, t_file *file);
+t_file			*copy_file(t_file *file);
+t_file			*free_list_files(t_file *list_files);
+
+/*
+** merge_sort.c
+*/
+void			merge_sort(t_file **file);
+
+/*
+** open_file.c
+*/
+t_file			*get_directories(t_file *head, int *width);
+t_file			*open_directory(char *path, int *width);
+void			go_recurse(t_file *list, int *width);
+
+/*
+** print.c
+*/
+void			print_l(t_file *file, int *width, int tot);
+void			print(t_file *list, int width, int width5);
+
+/*
+** support.c
+*/
+void			print_time(t_file *file, int *width);
+void			print_header(char *path);
+char			get_file_type(mode_t m);
+char			get_attr(t_file *file);
+int				numlen(int num);
+
+/*
+** new_file.c
+*/
+int				print_error(char *name);
+void			print_error_flags(char c);
+void			fill_stat(t_file *file, int *width);
+t_file			*create_file(char *path, char *name, int *width);
 
 #endif

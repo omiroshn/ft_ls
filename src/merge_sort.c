@@ -15,40 +15,41 @@
 static t_file	*ft_sort_mtime(t_file *root)
 {
 	t_file	*n_r;
-	t_file	*node;
+	t_file	*n;
 	t_file	*cur;
 
 	n_r = NULL;
-	while (root != NULL)
+	while (root)
 	{
-		node = root;
+		n = root;
 		root = root->next;
-		if (!n_r || node->st->st_mtimespec.tv_sec > n_r->st->st_mtimespec.tv_sec)
+		if (!n_r || n->st->st_mtimespec.tv_sec > n_r->st->st_mtimespec.tv_sec)
 		{
-			node->next = n_r;
-			n_r = node;
+			n->next = n_r;
+			n_r = n;
 		}
 		else
 		{
 			cur = n_r;
-			while (cur->next && node->st->st_mtimespec.tv_sec <= cur->next->st->st_mtimespec.tv_sec)
+			while (cur->next && n->st->st_mtimespec.tv_sec <=
+								cur->next->st->st_mtimespec.tv_sec)
 				cur = cur->next;
-			node->next = cur->next;
-			cur->next = node;
+			n->next = cur->next;
+			cur->next = n;
 		}
 	}
 	return (n_r);
 }
 
-t_file	*merge_lists(t_file *a, t_file *b)
+static t_file	*merge_lists(t_file *a, t_file *b)
 {
 	t_file *merged;
 
 	merged = NULL;
 	if (a == NULL)
-		return b;
+		return (b);
 	else if (b == NULL)
-		return a;
+		return (a);
 	if (g_r ? ft_strcmp(a->name, b->name) > 0 :
 			ft_strcmp(a->name, b->name) < 0)
 	{
@@ -63,7 +64,7 @@ t_file	*merge_lists(t_file *a, t_file *b)
 	return (merged);
 }
 
-void	partition(t_file *src, t_file **a, t_file **b)
+static void		partition(t_file *src, t_file **a, t_file **b)
 {
 	t_file *fast;
 	t_file *slow;
@@ -84,7 +85,7 @@ void	partition(t_file *src, t_file **a, t_file **b)
 	slow->next = NULL;
 }
 
-void	merge_sort(t_file **file)
+void			merge_sort(t_file **file)
 {
 	t_file *head;
 	t_file *a;

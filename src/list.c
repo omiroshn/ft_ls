@@ -25,41 +25,32 @@ t_file	*copy_file(t_file *file)
 {
 	t_file *new;
 
-	new = ft_memalloc(sizeof(t_file));
+	new = (t_file*)malloc(sizeof(t_file));
 	new->name = file->name;
 	new->path = file->path;
 	new->st = file->st;
 	new->owner = file->owner;
 	new->group = file->group;
-	return new;
+	return (new);
 }
 
-void	free_file(t_file *file)
+t_file	*free_list_files(t_file *list_files)
 {
-	free(file->name);
-	free(file->path);
-	free(file->st);
-	free(file->owner);
-	free(file->group);
-}
+	t_file *before;
 
-void	lst_free(t_file *head)
-{
-	t_file *tmp;
-
-	while (head)
+	while (list_files)
 	{
-		tmp = head;
-		free(tmp->name);
+		free(list_files->name);
+		free(list_files->path);
+		free(list_files->st);
 		if (g_l || g_s)
 		{
-			free(tmp->group);
-			free(tmp->owner);
+			free(list_files->owner);
+			free(list_files->group);
 		}
-		free(tmp->path);
-		free(tmp->st);
-		free(tmp);
-		head = head->next;
+		before = list_files;
+		list_files = list_files->next;
+		free(before);
 	}
-	free(head);
+	return (NULL);
 }
