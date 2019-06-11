@@ -55,8 +55,8 @@ static void	go_through_params(t_file *files, int *width)
 	t_file	*cpy;
 
 	directories = get_directories(files, width);
-	cpy = directories;
 	g_f ? 1 : merge_sort(&directories);
+	cpy = directories;
 	while (directories)
 	{
 		if (S_ISDIR(directories->st->st_mode))
