@@ -34,7 +34,8 @@ void	fill_stat(t_file *file, int *width)
 {
 	int len;
 
-	file->owner = ft_strdup(getpwuid(file->st->st_uid)->pw_name);
+	file->owner = getpwuid(file->st->st_uid) ?
+	ft_strdup(getpwuid(file->st->st_uid)->pw_name) : ft_strdup("Unknown");
 	if ((len = (int)ft_strlen(file->owner)) > width[1])
 		width[1] = len;
 	file->group = ft_strdup(getgrgid(file->st->st_gid)->gr_name);
