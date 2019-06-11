@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-void	init_flags(t_info *info, t_num *n)
+void		init_flags(t_info *info, t_num *n)
 {
 	info->hash = 0;
 	info->minus = 0;
@@ -94,7 +94,7 @@ static int	deal_with_types(t_info *info, t_num n, const char *str, int i)
 	return (i);
 }
 
-int	parse_argument(const char *str, t_info *info, t_num n)
+int			parse_argument(const char *str, t_info *info, t_num n)
 {
 	int		i;
 
