@@ -7,7 +7,8 @@
         "_errno_t.h": "c",
         "stdio.h": "c",
         "_time_t.h": "c",
-        "grp.h": "c"
+        "grp.h": "c",
+        "time.h": "c"
     },
     "C_Cpp.dimInactiveRegions": true
 }

@@ -12,35 +12,6 @@
 
 #include "ft_ls.h"
 
-static t_file	*ft_sort_mtime(t_file *root)
-{
-	t_file	*n_r;
-	t_file	*n;
-	t_file	*cur;
-
-	n_r = NULL;
-	while (root)
-	{
-		n = root;
-		root = root->next;
-		if (!n_r || n->st->st_mtimespec.tv_sec > n_r->st->st_mtimespec.tv_sec)
-		{
-			n->next = n_r;
-			n_r = n;
-		}
-		else
-		{
-			cur = n_r;
-			while (cur->next && n->st->st_mtimespec.tv_sec <=
-								cur->next->st->st_mtimespec.tv_sec)
-				cur = cur->next;
-			n->next = cur->next;
-			cur->next = n;
-		}
-	}
-	return (n_r);
-}
-
 static t_file	*merge_lists(t_file *a, t_file *b)
 {
 	t_file *merged;
@@ -99,5 +70,7 @@ void			merge_sort(t_file **file)
 	merge_sort(&b);
 	*file = merge_lists(a, b);
 	if (g_t)
-		*file = ft_sort_mtime(*file);
+		*file = g_r ? ft_sort_mtime_r(*file) : ft_sort_mtime(*file);
+	if (g_u)
+		*file = g_r ? ft_sort_utime_r(*file) : ft_sort_utime(*file);
 }

@@ -12,7 +12,7 @@
 
 NAME = ft_ls
 CC = clang
-FILES = main list merge_sort open_file new_file support print
+FILES = main list merge_sort time_sort open_file new_file support print
 LIBFT_DIR = libft/
 SRC = $(addprefix src/, $(addsuffix .c, $(FILES)))
 OBJ = $(addprefix obj/, $(addsuffix .o, $(FILES)))
