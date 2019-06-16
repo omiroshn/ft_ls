@@ -77,10 +77,10 @@ void			merge_sort(t_file **file);
 /*
 ** time_sort.c
 */
-t_file	*ft_sort_mtime(t_file *root);
-t_file	*ft_sort_mtime_r(t_file *root);
-t_file	*ft_sort_utime(t_file *root);
-t_file	*ft_sort_utime_r(t_file *root);
+t_file			*ft_sort_mtime(t_file *root);
+t_file			*ft_sort_mtime_r(t_file *root);
+t_file			*ft_sort_utime(t_file *root);
+t_file			*ft_sort_utime_r(t_file *root);
 
 /*
 ** open_file.c
