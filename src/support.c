@@ -77,7 +77,7 @@ char	get_attr(t_file *file)
 		acl_free(acl);
 		acl = NULL;
 	}
-	xattr = listxattr(file->name, NULL, 0, XATTR_NOFOLLOW);
+	xattr = listxattr(file->path, NULL, 0, XATTR_NOFOLLOW);
 	if (xattr > 0)
 		chr = '@';
 	else if (acl != NULL)
