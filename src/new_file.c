@@ -26,7 +26,7 @@ int		print_error(char *name)
 void	print_error_flags(char c)
 {
 	ft_dprintf(2, R"ls: illegal option -- %c\n"E, c);
-	ft_dprintf(2, R"usage: ft_ls [-lRartufgds] [file ...]\n"E);
+	ft_dprintf(2, R"usage: ft_ls [-lRartufgds1] [file ...]\n"E);
 	exit(1);
 }
 
